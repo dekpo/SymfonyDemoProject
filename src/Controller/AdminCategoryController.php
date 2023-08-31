@@ -11,8 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/category')]
-class CategoryController extends AbstractController
+#[Route('/admin/category')]
+class AdminCategoryController extends AbstractController
 {
     #[Route('/', name: 'app_category_index', methods: ['GET'])]
     public function index(CategoryRepository $categoryRepository): Response
@@ -30,6 +30,9 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $slug = $form->get('name')->getData();
+            $clearSlug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/','-',$slug)));
+            $category->setSlug($clearSlug);
             $category->setCreatedAt(new \DateTimeImmutable());
             $entityManager->persist($category);
             $entityManager->flush();
@@ -58,6 +61,9 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $slug = $form->get('name')->getData();
+            $clearSlug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/','-',$slug)));
+            $category->setSlug($clearSlug);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);

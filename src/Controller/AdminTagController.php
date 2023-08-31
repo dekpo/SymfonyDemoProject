@@ -11,8 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/tag')]
-class TagController extends AbstractController
+#[Route('/admin/tag')]
+class AdminTagController extends AbstractController
 {
     #[Route('/', name: 'app_tag_index', methods: ['GET'])]
     public function index(TagRepository $tagRepository): Response
@@ -30,6 +30,11 @@ class TagController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $slug = $form->get('name')->getData();
+            $clearSlug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/','-',$slug)));
+            $tag->setSlug($clearSlug);
+            
             $tag->setCreatedAt(new \DateTimeImmutable());
             $entityManager->persist($tag);
             $entityManager->flush();
@@ -58,6 +63,9 @@ class TagController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $slug = $form->get('name')->getData();
+            $clearSlug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/','-',$slug)));
+            $tag->setSlug($clearSlug);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_tag_index', [], Response::HTTP_SEE_OTHER);
