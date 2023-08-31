@@ -2,7 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Category;
 use App\Entity\Post;
+use App\Entity\Tag;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,6 +16,12 @@ class PostType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('category',EntityType::class,[
+                'class' => Category::class,
+                'choice_label' => 'name',
+                'label_attr' => ['class'=>'form-label'],
+                'attr' => ['class'=>'form-control']
+            ])
             ->add('title',null,[
                 'label_attr' => ['class'=>'form-label'],
                 'attr' => ['class'=>'form-control']
@@ -35,6 +44,15 @@ class PostType extends AbstractType
                 'row_attr' => ['class'=>'form-check'],
                 'label_attr' => ['class'=>'form-check-label'],
                 'attr' => ['class'=>'form-check-input']
+            ])
+            ->add('tag',EntityType::class,[
+                'class' => Tag::class,
+                'choice_label' => 'name',
+                'multiple' => true,
+                'expanded' => true,
+                'row_attr' => ['class'=>'form-check'],
+                'label_attr' => ['class'=>'form-check'],
+                // 'attr' => ['class'=>'form-check-input']
             ])
         ;
     }
