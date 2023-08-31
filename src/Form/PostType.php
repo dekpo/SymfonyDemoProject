@@ -16,8 +16,8 @@ class PostType extends AbstractType
             ->add('description')
             ->add('content')
             ->add('image')
-            ->add('createdAt')
-            ->add('updatedAt')
+            // ->add('createdAt')
+            // ->add('updatedAt')
             ->add('pinned')
         ;
     }
